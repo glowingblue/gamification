@@ -28,7 +28,7 @@ export default function() {
 
     const findMatchClass = function(node, className) {
         var newArray = [];
-        if (node.children) {
+        if (node && node.children) {
             var nodeInChildren = node.children.find(matchClass(className));
             if (nodeInChildren !== undefined) {
                 newArray = newArray.concat(nodeInChildren);
@@ -53,7 +53,7 @@ export default function() {
             points = app.translator.trans('fof-gamification.forum.user.points', { points: this.props.user.data.attributes.Points });
         }
 
-        items.add('points', points);
+        // items.add('points', points);
     });
 
     extend(UserCard.prototype, 'view', function(vnode) {
