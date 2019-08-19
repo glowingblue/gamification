@@ -13,6 +13,8 @@ fof-gamification:
       rank: Place
       name: User
       amount: Points
+      level: Level
+      expText: EXP
     notification:
       upvote: "{username} upvoted your post"
       downvote: "{username} downvoted your post"

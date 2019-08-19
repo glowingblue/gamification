@@ -27,7 +27,7 @@ export default class RankingsPage extends Page {
 
         if (this.loading) {
             loading = LoadingIndicator.component();
-        } else {
+        } else if (this.users.length < 25 ) {
             loading = Button.component({
                 children: app.translator.trans('core.forum.discussion_list.load_more_button'),
                 className: 'Button',
@@ -46,7 +46,7 @@ export default class RankingsPage extends Page {
                             <tr>
                                 <th className="rankings-mobile">{app.translator.trans('fof-gamification.forum.ranking.rank')}</th>
                                 <th>{app.translator.trans('fof-gamification.forum.ranking.name')}</th>
-                                <th>{app.translator.trans('fof-gamification.forum.ranking.amount')}</th>
+                                <th>{app.translator.trans('fof-gamification.forum.ranking.level')}</th>
                             </tr>
                             {this.users.map((user, i) => {
                                 ++i;
@@ -77,9 +77,9 @@ export default class RankingsPage extends Page {
                                             </div>
                                         </td>
                                         {i < 4 ? (
-                                            <td className={'rankings-' + i}>{user.data.attributes.Points}</td>
+                                            <td className={'rankings-' + i}>{user.expLevel}</td>
                                         ) : (
-                                            <td className="rankings-4">{user.data.attributes.Points}</td>
+                                            <td className="rankings-4">{user.expLevel}</td>
                                         )}
                                     </tr>,
                                 ];
@@ -206,8 +206,14 @@ export default class RankingsPage extends Page {
 
         this.loading = false;
 
-        this.users.sort(function(a, b) {
-            return parseFloat(b.data.attributes.Points) - parseFloat(a.data.attributes.Points);
+        this.users.forEach(user => {
+            let expComments = (user.commentCount() - user.discussionCount()) * 21,
+                expDiscussions = user.discussionCount() * 33,
+                expLikes = user.data.attributes.Points * 11;
+
+            let expTotal = expComments + expDiscussions + expLikes,
+                expLevel = Math.floor(expTotal / 135);
+            user.expLevel = expLevel;
         });
 
         m.lazyRedraw();
