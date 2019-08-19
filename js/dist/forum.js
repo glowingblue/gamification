@@ -256,7 +256,7 @@ __webpack_require__.r(__webpack_exports__);
   var findMatchClass = function findMatchClass(node, className) {
     var newArray = [];
 
-    if (node.children) {
+    if (node && node.children) {
       var nodeInChildren = node.children.find(matchClass(className));
 
       if (nodeInChildren !== undefined) {
@@ -284,9 +284,8 @@ __webpack_require__.r(__webpack_exports__);
       points = app.translator.trans('fof-gamification.forum.user.points', {
         points: this.props.user.data.attributes.Points
       });
-    }
+    } // items.add('points', points);
 
-    items.add('points', points);
   });
   Object(flarum_extend__WEBPACK_IMPORTED_MODULE_1__["extend"])(flarum_components_UserCard__WEBPACK_IMPORTED_MODULE_6___default.a.prototype, 'view', function (vnode) {
     var user = this.props.user;
