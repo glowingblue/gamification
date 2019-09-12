@@ -2,6 +2,19 @@ import Component from 'flarum/Component';
 import app from 'flarum/app';
 
 export default class LevelBar extends Component {
+    init() {
+        this.fields = [
+            'pointsPerDiscussion',
+            'pointsPerComment',
+            'pointsPerUpvote',
+            'pointsForNewLevel'
+        ];
+
+        this.values = {};
+        this.settingsPrefix = 'fof-gamification';
+        this.fields.forEach(key => (this.values[key] = m.prop(app.forum.attribute(this.addPrefix(key)))));
+    }
+
     config() {
         this.$().tooltip({ container: 'body' });
     }
@@ -12,13 +25,14 @@ export default class LevelBar extends Component {
             'fof-gamification.forum.ranking.level'
         );
 
-        let expComments = (user.commentCount() - user.discussionCount()) * 21,
-            expDiscussions = user.discussionCount() * 33,
-            expLikes = user.data.attributes.Points * 11;
+        let expComments = (user.commentCount() - user.discussionCount()) * this.values.pointsPerComment(),
+            expDiscussions = user.discussionCount() * this.values.pointsPerDiscussion(),
+            expLikes = user.data.attributes.Points * this.values.pointsPerUpvote();
 
         let expTotal = expComments + expDiscussions + expLikes,
-            expLevel = Math.floor(expTotal / 135),
-            expPercent = (100 / 135) * (expTotal - expLevel * 135);
+            expLevel = Math.floor(expTotal / this.values.pointsForNewLevel()),
+            expPercent = (100 / this.values.pointsForNewLevel()) * (expTotal - expLevel * this.values.pointsForNewLevel());
+        user.expLevel = expLevel;
 
         return (
             <div
@@ -36,5 +50,12 @@ export default class LevelBar extends Component {
                 <div class='PostUser-bar' style={'width: ' + expPercent + '%;'}></div>
             </div>
         );
+    }
+
+    /**
+     * @returns string
+     */
+    addPrefix(key) {
+        return this.settingsPrefix + '.' + key;
     }
 }

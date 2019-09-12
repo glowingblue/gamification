@@ -43,5 +43,7 @@ return [
         $events->subscribe(Access\DiscussionPolicy::class);
 
         $events->listen(Saving::class, Listeners\SaveVotesToDatabase::class);
+
+        $events->subscribe(Listeners\InjectSettings::class);
     },
 ];

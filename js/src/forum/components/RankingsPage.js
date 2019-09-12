@@ -20,6 +20,17 @@ export default class RankingsPage extends Page {
         this.loading = true;
         this.users = [];
         this.refresh();
+
+        this.fields = [
+            'pointsPerDiscussion',
+            'pointsPerComment',
+            'pointsPerUpvote',
+            'pointsForNewLevel'
+        ];
+
+        this.values = {};
+        this.settingsPrefix = 'fof-gamification';
+        this.fields.forEach(key => (this.values[key] = m.prop(app.forum.attribute(this.addPrefix(key)))));
     }
 
     view() {
@@ -35,7 +46,7 @@ export default class RankingsPage extends Page {
             });
         }
         return (
-            <div className="TagsPage">
+            <div className="TagsPage RankingsPage">
                 {IndexPage.prototype.hero()}
                 <div className="container">
                     <nav className="RankingPage-nav IndexPage-nav sideNav" config={IndexPage.prototype.affixSidebar}>
@@ -86,6 +97,16 @@ export default class RankingsPage extends Page {
                             })}
                         </table>
                         <div className="rankings-loadmore"> {loading}</div>
+                        <hr/>
+                        <p className='rankings-explain'>
+                            {app.translator.trans('fof-gamification.forum.ranking.explain_formula')}<br/>
+                            <ul>
+                                <li>{app.translator.trans('fof-gamification.forum.ranking.explain_discussion', {points: this.values.pointsPerDiscussion()})}</li>
+                                <li>{app.translator.trans('fof-gamification.forum.ranking.explain_comments', {points: this.values.pointsPerComment()})}</li>
+                                <li>{app.translator.trans('fof-gamification.forum.ranking.explain_upvotes', {points: this.values.pointsPerUpvote()})}</li>
+                            </ul>
+                            {app.translator.trans('fof-gamification.forum.ranking.explain_level', {points: this.values.pointsForNewLevel()})}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -207,17 +228,24 @@ export default class RankingsPage extends Page {
         this.loading = false;
 
         this.users.forEach(user => {
-            let expComments = (user.commentCount() - user.discussionCount()) * 21,
-                expDiscussions = user.discussionCount() * 33,
-                expLikes = user.data.attributes.Points * 11;
+            let expComments = (user.commentCount() - user.discussionCount()) * this.values.pointsPerComment(),
+                expDiscussions = user.discussionCount() * this.values.pointsPerDiscussion(),
+                expLikes = user.data.attributes.Points * this.values.pointsPerUpvote();
 
             let expTotal = expComments + expDiscussions + expLikes,
-                expLevel = Math.floor(expTotal / 135);
+                expLevel = Math.floor(expTotal / this.values.pointsForNewLevel());
             user.expLevel = expLevel;
         });
 
         m.lazyRedraw();
 
         return results;
+    }
+
+    /**
+     * @returns string
+     */
+    addPrefix(key) {
+        return this.settingsPrefix + '.' + key;
     }
 }

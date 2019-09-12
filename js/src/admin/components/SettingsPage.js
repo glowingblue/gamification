@@ -16,6 +16,10 @@ export default class SettingsPage extends Page {
             'iconName',
             'blockedUsers',
             'pointsPlaceholder',
+            'pointsPerDiscussion',
+            'pointsPerComment',
+            'pointsPerUpvote',
+            'pointsForNewLevel'
         ];
 
         this.switches = [
@@ -200,6 +204,34 @@ export default class SettingsPage extends Page {
                             m('br'),
                             m('label', { className: 'Upload-label' }, app.translator.trans('fof-gamification.admin.page.rankings.custom_image_3')),
                             <UploadImageButton className="Upload-button" name="topimage3" />,
+                            m('br'),
+
+                            m('legend', {}, app.translator.trans('fof-gamification.admin.page.levels.title')),
+                            m('label', {}, app.translator.trans('fof-gamification.admin.page.levels.pointsPerDiscussion_label')),
+                            m('input', {
+                                className: 'FormControl Ranks-default',
+                                value: this.values.pointsPerDiscussion() || '',
+                                oninput: m.withAttr('value', this.values.pointsPerDiscussion),
+                            }),
+                            m('label', {}, app.translator.trans('fof-gamification.admin.page.levels.pointsPerComment_label')),
+                            m('input', {
+                                className: 'FormControl Ranks-default',
+                                value: this.values.pointsPerComment() || '',
+                                oninput: m.withAttr('value', this.values.pointsPerComment),
+                            }),
+                            m('label', {}, app.translator.trans('fof-gamification.admin.page.levels.pointsPerUpvote_label')),
+                            m('input', {
+                                className: 'FormControl Ranks-default',
+                                value: this.values.pointsPerUpvote() || '',
+                                oninput: m.withAttr('value', this.values.pointsPerUpvote),
+                            }),
+                            m('label', {}, app.translator.trans('fof-gamification.admin.page.levels.pointsForNewLevel_label')),
+                            m('input', {
+                                className: 'FormControl Ranks-default',
+                                value: this.values.pointsForNewLevel() || '',
+                                oninput: m.withAttr('value', this.values.pointsForNewLevel),
+                            }),
+
                             m('br'),
                             Button.component({
                                 type: 'submit',

@@ -15,6 +15,11 @@ fof-gamification:
       amount: Points
       level: Level
       expText: EXP
+      explain_formula: Your level is computed by aggregating points that you received from posting new discussions, comments and your receiving upvotes.
+      explain_discussion: Each of your posted discussion gives you {points} points.
+      explain_comments: Each of your posted comments gives you {points} points.
+      explain_upvotes: The difference between your received up and down votes gives you {points} points.
+      explain_level: When you accumulate {points} points, you reach a new level!
     notification:
       upvote: "{username} upvoted your post"
       downvote: "{username} downvoted your post"
@@ -70,3 +75,9 @@ fof-gamification:
           help: "Input the required number of upvotes, the name of the rank, and the hex color of the rank"
           points: Points
           name: Name
+      levels:
+        title: Adjust how levels are computed
+        pointsPerDiscussion_label: Points given when a user starts a discussion
+        pointsPerComment_label: Points given when a user comments on an existing discussion
+        pointsPerUpvote_label: Points given to the users "Points" (difference between up and down votes)
+        pointsForNewLevel_label: Number of points needed to reach a new level
