@@ -96,9 +96,14 @@ class Gamification
             $limit = $limit + $offset - self::MAXIMUM_USER_EXPOSED;
         }
 
+        $pointsPerDiscussion = $this->settings->get('fof-gamification.pointsPerDiscussion');
+        $pointsPerComment = $this->settings->get('fof-gamification.pointsPerComment');
+        $pointsPerUpvote = $this->settings->get('fof-gamification.pointsPerUpvote');
+        $epointsForNewLevel = $this->settings->get('fof-gamification.pointsForNewLevel');
+
         $query = User::query()
             ->whereNotIn('username', $blockedUsers)
-            ->orderByRaw('FLOOR(((comment_count - discussion_count) * 21 + discussion_count * 33 + votes * 11) / 135) DESC')
+            ->orderByRaw('FLOOR(((cast(comment_count as signed) - cast(discussion_count as signed)) * ' . $pointsPerDiscussion . ' + discussion_count * ' . $pointsPerComment . ' + votes * ' . $pointsPerUpvote . ') / ' . $epointsForNewLevel . ') DESC')
             ->offset($offset)
             ->take($limit)
             ->get();
