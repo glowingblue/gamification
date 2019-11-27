@@ -124,7 +124,7 @@ class Gamification
         if (null !== $post && null !== $post->user && null !== $user) {
             $post->user->increment('votes');
 
-            if ($post->number = 1) {
+            if ($post->number = 1 && isset($post->discussion)) {
                 $post->discussion->increment('votes');
             }
 
