@@ -21,8 +21,8 @@ return [
 
         $items = [
             'pointsPerDiscussion' => 10,
-            'pointsPerComment' => 21,
-            'pointsPerUpvote' => 31,
+            'pointsPerComment' => 20,
+            'pointsPerUpvote' => 5,
             'pointsForNewLevel' => 135,
         ];
 

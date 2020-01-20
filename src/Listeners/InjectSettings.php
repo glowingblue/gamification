@@ -40,8 +40,8 @@ class InjectSettings
     {
         if ($event->isSerializer(ForumSerializer::class)) {
             $event->attributes['fof-gamification.pointsPerDiscussion'] = $this->settings->get('fof-gamification.pointsPerDiscussion', 10);
-            $event->attributes['fof-gamification.pointsPerComment'] = $this->settings->get('fof-gamification.pointsPerComment', 21);
-            $event->attributes['fof-gamification.pointsPerUpvote'] = $this->settings->get('fof-gamification.pointsPerUpvote', 31);
+            $event->attributes['fof-gamification.pointsPerComment'] = $this->settings->get('fof-gamification.pointsPerComment', 20);
+            $event->attributes['fof-gamification.pointsPerUpvote'] = $this->settings->get('fof-gamification.pointsPerUpvote', 5);
             $event->attributes['fof-gamification.pointsForNewLevel'] = $this->settings->get('fof-gamification.pointsForNewLevel', 135);
         }
     }
