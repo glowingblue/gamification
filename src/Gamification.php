@@ -99,11 +99,10 @@ class Gamification
         $pointsPerDiscussion = $this->settings->get('fof-gamification.pointsPerDiscussion');
         $pointsPerComment = $this->settings->get('fof-gamification.pointsPerComment');
         $pointsPerUpvote = $this->settings->get('fof-gamification.pointsPerUpvote');
-        $epointsForNewLevel = $this->settings->get('fof-gamification.pointsForNewLevel');
 
         $query = User::query()
             ->whereNotIn('username', $blockedUsers)
-            ->orderByRaw('FLOOR(((cast(comment_count as signed) - cast(discussion_count as signed)) * ' . $pointsPerDiscussion . ' + discussion_count * ' . $pointsPerComment . ' + votes * ' . $pointsPerUpvote . ') / ' . $epointsForNewLevel . ') DESC')
+            ->orderByRaw('FLOOR((cast(comment_count as signed) - cast(discussion_count as signed)) * ' . $pointsPerComment . ' + discussion_count * ' . $pointsPerDiscussion . ' + votes * ' . $pointsPerUpvote . ') DESC')
             ->offset($offset)
             ->take($limit)
             ->get();
