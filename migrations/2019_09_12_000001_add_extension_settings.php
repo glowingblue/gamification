@@ -20,10 +20,10 @@ return [
         $settings = app('flarum.settings');
 
         $items = [
-            'pointsPerDiscussion' => 11,
-            'pointsPerComment' => 20,
-            'pointsPerUpvote' => 6,
-            'pointsForNewLevel' => 111,
+            'pointsPerDiscussion' => 5,
+            'pointsPerComment' => 8,
+            'pointsPerUpvote' => 13,
+            'pointsForNewLevel' => 55,
         ];
 
         foreach ($items as $key => $value) {
