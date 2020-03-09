@@ -102,7 +102,7 @@ class Gamification
 
         $query = User::query()
             ->whereNotIn('username', $blockedUsers)
-            ->orderByRaw('FLOOR((cast(comment_count as signed) - cast(discussion_count as signed)) * ' . $pointsPerComment . ' + discussion_count * ' . $pointsPerDiscussion . ' + votes * ' . $pointsPerUpvote . ') DESC')
+            ->orderByRaw('FLOOR((cast(comment_count as signed) - cast(discussion_count as signed)) * ' . $pointsPerComment . ' + cast(discussion_count as signed) * ' . $pointsPerDiscussion . ' + cast(votes as signed) * ' . $pointsPerUpvote . ') DESC')
             ->offset($offset)
             ->take($limit)
             ->get();
