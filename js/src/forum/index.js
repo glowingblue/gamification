@@ -9,6 +9,8 @@ import VoteNotification from './components/VoteNotification';
 import addUpvotesToDiscussion from './components/addUpvotesToDiscussion';
 import PostUser from 'flarum/components/PostUser';
 import LevelBar from './components/LevelBar';
+import User from 'flarum/models/User';
+import Model from 'flarum/Model';
 
 app.initializers.add('fof-gamification', app => {
     app.store.models.ranks = Rank;
@@ -16,6 +18,9 @@ app.initializers.add('fof-gamification', app => {
     app.notificationComponents.vote = VoteNotification;
 
     app.routes.rankings = { path: '/rankings', component: RankingsPage.component() };
+
+    // Add attributes to the user model
+	User.prototype.canViewRankingPage = Model.attribute('canViewRankingPage');
 
     AddVoteButtons();
     AddHotnessFilter();

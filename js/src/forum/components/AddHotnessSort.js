@@ -54,6 +54,15 @@ export default function() {
     };
 
     extend(IndexPage.prototype, 'navItems', function(items) {
+
+        if(!app.session.user) {
+            return;
+        }
+
+        if (!app.session.user.canViewRankingPage()) {
+            return;
+        }
+
         items.add(
             'rankings',
             LinkButton.component({
