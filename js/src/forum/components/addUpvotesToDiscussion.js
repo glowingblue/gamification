@@ -6,7 +6,9 @@ import icon from 'flarum/helpers/icon';
 export default function () {
     extend(DiscussionListItem.prototype, 'infoItems', function(items) {
         if (app.forum.attribute('showVotesOnDiscussionPage')) {
-            $('.DiscussionListItem-info').find('.item-tags').addClass('gamification');
+            setTimeout(()=> {
+                $('.DiscussionListItem-info').find('.item-tags').addClass('gamification');
+            }, 100);
             items.add('discussion-votes', (
                 <span className="DiscussionListItem-votes" title={app.translator.trans('fof-gamification.forum.votes')}>
                 {icon('far fa-thumbs-up')}
