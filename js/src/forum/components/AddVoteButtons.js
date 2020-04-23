@@ -113,13 +113,13 @@ export default function() {
                 icon: 'fas fa-' + icon + '-up',
                 className: 'Post-vote Post-upvote',
                 style: isUpvoted !== false ? 'color:' + app.forum.data.attributes.themePrimaryColor : 'color:',
-                disabled: !post.discussion().canVote(),
+                disabled: !post.discussion().canVote() || !post.canVote(),
                 onclick: () => {
                     if (!app.session.user) {
                         app.modal.show(new LogInModal());
                         return;
                     }
-                    if (!post.discussion().canVote()) return;
+                    if (!post.discussion().canVote() || !post.canVote()) return;
 
                     var upData = post.data.relationships.upvotes.data;
                     var downData = post.data.relationships.downvotes.data;
@@ -158,13 +158,13 @@ export default function() {
                 icon: 'fas fa-' + icon + '-down',
                 className: 'Post-vote Post-downvote',
                 style: isDownvoted !== false ? 'color:' + app.forum.data.attributes.themePrimaryColor : '',
-                disabled: !post.discussion().canVote(),
+                disabled: !post.discussion().canVote() || !post.canVote(),
                 onclick: () => {
                     if (!app.session.user) {
                         app.modal.show(new LogInModal());
                         return;
                     }
-                    if (!post.discussion().canVote()) return;
+                    if (!post.discussion().canVote() || !post.canVote()) return;
 
                     var upData = post.data.relationships.upvotes.data;
                     var downData = post.data.relationships.downvotes.data;

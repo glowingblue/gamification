@@ -41,6 +41,7 @@ return [
         $events->subscribe(Listeners\FilterDiscussionListByHotness::class);
 
         $events->subscribe(Access\DiscussionPolicy::class);
+        $events->subscribe(Access\PostPolicy::class);
 
         $events->listen(Saving::class, Listeners\SaveVotesToDatabase::class);
 

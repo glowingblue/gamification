@@ -17,6 +17,7 @@ export default function() {
 
     Post.prototype.upvotes = Model.hasMany('upvotes');
     Post.prototype.downvotes = Model.hasMany('downvotes');
+    Post.prototype.canVote = Model.attribute('canVote');
 
     const matchClass = className => {
         return node => node && node.attrs && node.attrs.className && node.attrs.className === className;

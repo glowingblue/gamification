@@ -127,6 +127,10 @@ class AddRelationships
             $event->attributes['canVote'] = (bool) $event->actor->can('vote', $event->model);
             $event->attributes['canSeeVotes'] = (bool) $event->actor->can('canSeeVotes', $event->model);
         }
+
+        if ($event->isSerializer(Serializer\PostSerializer::class)) {
+            $event->attributes['canVote'] = (bool) $event->actor->can('vote', $event->model);
+        }
     }
 
     /**
