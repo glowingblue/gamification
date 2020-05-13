@@ -1,5 +1,21 @@
 # Gamification by FriendsOfFlarum
 
+THIS IS A CUSTOMIZED VERSION THAT IS KIND OF A MERGE WITH reflar/level-ranks.
+
+To update from original repo:
+
+```sh
+# Add the remote, call it "orig_repo":
+git remote add orig_repo https://github.com/FriendsOfFlarum/gamification.git
+# Fetch all the branches of that remote into remote-tracking branches,
+# such as orig_repo/master:
+git fetch orig_repo
+# Make sure that you're on your master branch:
+git checkout master
+# Pull new commits (then resolve conflicts and commit)
+git pull orig_repo master
+```
+
 ![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/fof/gamification.svg)](https://packagist.org/packages/fof/gamification) [![OpenCollective](https://img.shields.io/badge/opencollective-fof-blue.svg)](https://opencollective.com/fof/donate)  
 
 A [Flarum](http://flarum.org) extension. Add upvotes, downvotes, and ranks to your Flarum Community!
