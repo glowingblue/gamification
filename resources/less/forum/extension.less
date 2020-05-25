@@ -106,14 +106,29 @@
     }
 }
 
+@dark-control-bg: hsl(@secondary-hue, min(20%, @secondary-sat), 13%);
+@dark-body-bg: hsl(@secondary-hue, min(20%, @secondary-sat), 10%);
+
 .ranking-1 {
     background: rgba(255, 255, 255, 0.8);
+
+    body.dark & {
+        background: lighten(@dark-control-bg, 17%);;
+    }
 }
 .ranking-2 {
     background: rgba(255, 255, 255, 0.6);
+
+    body.dark & {
+        background: lighten(@dark-control-bg, 9%);;
+    }
 }
 .ranking-3 {
     background: rgba(255, 255, 255, 0.4);
+
+    body.dark & {
+        background: lighten(@dark-control-bg, 3%);;
+    }
 }
 
 .rankings {
@@ -123,10 +138,17 @@
     border-radius: 4px;
     background: rgba(255, 255, 255, 0.3);
 
+    body.dark & {
+        background: @dark-control-bg;
+    }
+
     th {
         font-size: 120%;
         font-weight: bold;
         background: white;
+        body.dark & {
+            background: lighten(@dark-control-bg, 17%);
+        }
     }
 
     td,
@@ -136,6 +158,9 @@
         width: 33.33333333%;
         vertical-align: center;
         border-bottom: 3px solid #f7f7f7;
+        body.dark & {
+            border-bottom: 3px solid @dark-body-bg;
+        }
     }
 
     &-1 {
