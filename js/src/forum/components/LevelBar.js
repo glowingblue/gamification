@@ -40,6 +40,11 @@ export default class LevelBar extends Component {
 
     view() {
         const user = this.props.post.user();
+
+        if (!user) {
+            return <div></div>;
+        }
+
         const pointsText = app.translator.trans(
             "fof-gamification.forum.ranking.level"
         );
@@ -61,7 +66,9 @@ export default class LevelBar extends Component {
 
         const isMod = this.isMod(user);
 
-        return isMod ? <div></div> : (
+        return isMod ? (
+            <div></div>
+        ) : (
             <div
                 class="PostUser-level"
                 title={`${expTotal} ${app.translator.trans(
