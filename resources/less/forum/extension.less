@@ -1,9 +1,10 @@
-@import '../lib/rankLabel.less';
+@import "../lib/rankLabel.less";
+@import "./alternateLayout.less";
 
 @media (min-width: 768px) {
-    .DiscussionListItem-info > .item-tags.gamification {
-        right: 122px !important;
-    }
+  .DiscussionListItem-info .item-discussion-votes + .item-tags   {
+    right: 122px !important;
+  }
 }
 
 .item-discussion-votes {
@@ -60,27 +61,32 @@
     width: 215px;
 }
 
-.Post-vote {
-    background-color: rgba(0, 0, 0, 0);
-    border: none;
-    margin: 7px 1em 0 1em;
+.CommentPost-votes {
+    .Post-points {
+        background-color: rgba(0, 0, 0, 0);
+        border: none;
+        margin-right: 0.5em;
+    }
+
+    .Post-vote {
+        background-color: rgba(0, 0, 0, 0);
+        border: none;
+        margin: 8px 0 0;
+
+        &:focus {
+            outline: 0;
+        }
+
+        &.disabled {
+            cursor: not-allowed;
+        }
+    }
 }
 
 .Post-Rank {
     color: gray;
     font-size: 10px;
     margin-left: 10px;
-}
-
-.Post-vote:focus {
-    outline: 0;
-}
-
-.item-points {
-    margin-top: 7px;
-    background-color: rgba(0, 0, 0, 0);
-    border: none;
-    margin-right: 0.5em !important;
 }
 
 .User-Rank {
@@ -112,21 +118,21 @@
 .ranking-1 {
     background: rgba(255, 255, 255, 0.8);
 
-    body.dark & {
+    & when (@config-dark-mode = true) {
         background: lighten(@dark-control-bg, 17%);;
     }
 }
 .ranking-2 {
     background: rgba(255, 255, 255, 0.6);
 
-    body.dark & {
+    & when (@config-dark-mode = true) {
         background: lighten(@dark-control-bg, 9%);;
     }
 }
 .ranking-3 {
     background: rgba(255, 255, 255, 0.4);
 
-    body.dark & {
+    & when (@config-dark-mode = true) {
         background: lighten(@dark-control-bg, 3%);;
     }
 }
@@ -138,7 +144,7 @@
     border-radius: 4px;
     background: rgba(255, 255, 255, 0.3);
 
-    body.dark & {
+    & when (@config-dark-mode = true) {
         background: @dark-control-bg;
     }
 
@@ -146,7 +152,7 @@
         font-size: 120%;
         font-weight: bold;
         background: white;
-        body.dark & {
+        & when (@config-dark-mode = true) {
             background: lighten(@dark-control-bg, 17%);
         }
     }
@@ -158,7 +164,7 @@
         width: 33.33333333%;
         vertical-align: center;
         border-bottom: 3px solid #f7f7f7;
-        body.dark & {
+        & when (@config-dark-mode = true) {
             border-bottom: 3px solid @dark-body-bg;
         }
     }

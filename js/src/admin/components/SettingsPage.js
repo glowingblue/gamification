@@ -19,15 +19,10 @@ export default class SettingsPage extends Page {
             'pointsPerDiscussion',
             'pointsPerComment',
             'pointsPerUpvote',
-            'pointsForNewLevel'
+            'pointsForNewLevel',
         ];
 
-        this.switches = [
-            'autoUpvotePosts',
-            'customRankingImages',
-            'rateLimit',
-            'showVotesOnDiscussionPage'
-        ];
+        this.switches = ['autoUpvotePosts', 'customRankingImages', 'rateLimit', 'showVotesOnDiscussionPage', 'useAlternateLayout'];
 
         this.ranks = app.store.all('ranks');
 
@@ -37,9 +32,9 @@ export default class SettingsPage extends Page {
 
         const settings = app.data.settings;
 
-        this.fields.forEach(key => (this.values[key] = m.prop(settings[this.addPrefix(key)])));
+        this.fields.forEach((key) => (this.values[key] = m.prop(settings[this.addPrefix(key)])));
 
-        this.switches.forEach(key => (this.values[key] = m.prop(settings[this.addPrefix(key)] === '1')));
+        this.switches.forEach((key) => (this.values[key] = m.prop(!!Number(settings[this.addPrefix(key)]))));
 
         this.newRank = {
             points: m.prop(''),
@@ -83,7 +78,7 @@ export default class SettingsPage extends Page {
                             m(
                                 'div',
                                 { className: 'Ranks--Container' },
-                                this.ranks.map(rank => {
+                                this.ranks.map((rank) => {
                                     return m('div', { style: 'float: left;' }, [
                                         m('input', {
                                             className: 'FormControl Ranks-number',
@@ -147,6 +142,7 @@ export default class SettingsPage extends Page {
                                 placeholder: 2,
                                 oninput: m.withAttr('value', this.values.rankAmt),
                             }),
+
                             m('legend', {}, app.translator.trans('fof-gamification.admin.page.votes.title')),
                             m('label', {}, app.translator.trans('fof-gamification.admin.page.votes.icon_name')),
                             m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.votes.icon_help')),
@@ -174,6 +170,12 @@ export default class SettingsPage extends Page {
                                 onchange: this.values.showVotesOnDiscussionPage,
                                 className: 'votes-switch',
                             }),
+                            Switch.component({
+                                state: this.values.useAlternateLayout() || false,
+                                children: app.translator.trans('fof-gamification.admin.page.votes.alternate_layout'),
+                                onchange: this.values.useAlternateLayout,
+                                className: 'votes-switch',
+                            }),
                             m('label', {}, app.translator.trans('fof-gamification.admin.page.votes.points_title')),
                             m('input', {
                                 className: 'FormControl Ranks-default',
@@ -181,6 +183,7 @@ export default class SettingsPage extends Page {
                                 placeholder: app.translator.trans('fof-gamification.admin.page.votes.points_placeholder') + '{points}',
                                 oninput: m.withAttr('value', this.values.pointsPlaceholder),
                             }),
+
                             m('legend', {}, app.translator.trans('fof-gamification.admin.page.rankings.title')),
                             Switch.component({
                                 state: this.values.customRankingImages() || false,
@@ -197,13 +200,13 @@ export default class SettingsPage extends Page {
                             }),
                             m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.rankings.blocked.help')),
                             m('label', { className: 'Upload-label' }, app.translator.trans('fof-gamification.admin.page.rankings.custom_image_1')),
-                            <UploadImageButton className="Upload-button" name="topimage1" />,
+                            <UploadImageButton className="Upload-button" name="fof-gamification.topimage1" />,
                             m('br'),
                             m('label', { className: 'Upload-label' }, app.translator.trans('fof-gamification.admin.page.rankings.custom_image_2')),
-                            <UploadImageButton className="Upload-button" name="topimage2" />,
+                            <UploadImageButton className="Upload-button" name="fof-gamification.topimage2" />,
                             m('br'),
                             m('label', { className: 'Upload-label' }, app.translator.trans('fof-gamification.admin.page.rankings.custom_image_3')),
-                            <UploadImageButton className="Upload-button" name="topimage3" />,
+                            <UploadImageButton className="Upload-button" name="fof-gamification.topimage3" />,
                             m('br'),
 
                             m('legend', {}, app.translator.trans('fof-gamification.admin.page.levels.title')),
@@ -277,7 +280,7 @@ export default class SettingsPage extends Page {
                 name: this.newRank.name(),
                 color: this.newRank.color(),
             })
-            .then(rank => {
+            .then((rank) => {
                 this.newRank.color('');
                 this.newRank.name('');
                 this.newRank.points('');
@@ -291,8 +294,8 @@ export default class SettingsPage extends Page {
      * @returns boolean
      */
     changed() {
-        var switchesCheck = this.switches.some(key => this.values[key]() !== (app.data.settings[this.addPrefix(key)] == '1'));
-        var fieldsCheck = this.fields.some(key => this.values[key]() !== app.data.settings[this.addPrefix(key)]);
+        var switchesCheck = this.switches.some((key) => this.values[key]() !== (app.data.settings[this.addPrefix(key)] == '1'));
+        var fieldsCheck = this.fields.some((key) => this.values[key]() !== app.data.settings[this.addPrefix(key)]);
         return fieldsCheck || switchesCheck;
     }
 
@@ -310,8 +313,8 @@ export default class SettingsPage extends Page {
 
         const settings = {};
 
-        this.switches.forEach(key => (settings[this.addPrefix(key)] = this.values[key]()));
-        this.fields.forEach(key => (settings[this.addPrefix(key)] = this.values[key]()));
+        this.switches.forEach((key) => (settings[this.addPrefix(key)] = this.values[key]()));
+        this.fields.forEach((key) => (settings[this.addPrefix(key)] = this.values[key]()));
 
         saveSettings(settings)
             .then(() => {

@@ -19,25 +19,10 @@ return [
          */
         $settings = app('flarum.settings');
 
-        $keys = [
-            'convertedLikes',
-            'amountPerPost',
-            'amountPerDiscussion',
-            'postStartAmount',
-            'rankAmt',
-            'iconName',
-            'blockedUsers',
-            'pointsPlaceholder',
-            'autoUpvotePosts',
-            'customRankingImages',
-        ];
-
-        foreach ($keys as $key) {
-            $value = $settings->get($full = "reflar.gamification.$key");
-
-            if ($value !== null) {
+        foreach ([1, 2, 3] as $num) {
+            if ($value = $settings->get($key = "topimage{$num}_path")) {
                 $settings->set("fof-gamification.$key", $value);
-                $settings->delete($full);
+                $settings->delete($key);
             }
         }
     },

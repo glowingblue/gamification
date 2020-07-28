@@ -4,18 +4,18 @@ import PermissionGrid from 'flarum/components/PermissionGrid';
 import addSettingsPage from './addSettingsPage';
 import Rank from '../common/models/Rank';
 
-app.initializers.add('fof-gamification', app => {
+app.initializers.add('fof-gamification', (app) => {
     app.store.models.ranks = Rank;
 
-    extend(PermissionGrid.prototype, 'replyItems', items => {
+    extend(PermissionGrid.prototype, 'replyItems', (items) => {
         items.add('Vote', {
             icon: 'fas fa-thumbs-up',
             label: app.translator.trans('fof-gamification.admin.permissions.vote_label'),
-            permission: 'discussion.vote',
+            permission: 'discussion.votePosts',
         });
     });
 
-    extend(PermissionGrid.prototype, 'viewItems', items => {
+    extend(PermissionGrid.prototype, 'viewItems', (items) => {
         items.add('canSeeVotes', {
             icon: 'fas fa-info-circle',
             label: app.translator.trans('fof-gamification.admin.permissions.see_votes_label'),
@@ -31,3 +31,6 @@ app.initializers.add('fof-gamification', app => {
 
     addSettingsPage();
 });
+
+export * from '../common/helpers';
+export * from './components';

@@ -3,7 +3,7 @@
 /*
  * This file is part of fof/gamification.
  *
- * Copyright (c) 2019 FriendsOfFlarum.
+ * Copyright (c) 2020 FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -69,17 +69,18 @@ class EventHandlers
         if ('0' !== $this->settings->get('fof-gamification.autoUpvotePosts')) {
             $actor = $event->actor;
 
-            $actor->increment('votes');
-            $event->post->discussion->increment('votes');
+            Vote::updateUserVotes($actor)->save();
+
+            Vote::updateDiscussionVotes($event->post->discussion);
             $this->gamification->calculateHotness($event->post->discussion);
 
             $vote = Vote::build($event->post, $actor);
-            $vote->type = 'Up';
+            $vote->value = 1;
             $vote->save();
 
             $ranks = Rank::where('points', '<=', $actor->votes)->get();
 
-            if (null !== $ranks) {
+            if ($ranks) {
                 $actor->ranks()->detach();
                 $actor->ranks()->attach($ranks);
             }

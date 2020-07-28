@@ -3,7 +3,7 @@
 /*
  * This file is part of fof/gamification.
  *
- * Copyright (c) 2019 FriendsOfFlarum.
+ * Copyright (c) 2020 FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,6 +13,7 @@ namespace FoF\Gamification;
 
 use Flarum\Extend;
 use Flarum\Post\Event\Saving;
+use FoF\Extend\Extend\ExtensionSettings;
 use FoF\Gamification\Api\Controllers;
 use Illuminate\Contracts\Events\Dispatcher;
 
@@ -25,7 +26,17 @@ return [
         ->css(__DIR__.'/resources/less/forum/extension.less')
         ->route('/rankings', 'rankings')
         ->route('/hot', 'hot'),
+
     new Extend\Locales(__DIR__.'/resources/locale'),
+
+    (new ExtensionSettings())
+        ->setPrefix('fof-gamification.')
+        ->addKeys([
+            'iconName', 'pointsPlaceholder', 'showVotesOnDiscussionPage', 'rankAmt',
+            'customRankingImages',
+            'useAlternateLayout',
+        ]),
+
     (new Extend\Routes('api'))
         ->post('/fof/gamification/convert', 'fof.gamification.convert', Controllers\ConvertLikesController::class)
         ->get('/ranks', 'ranks.index', Controllers\ListRanksController::class)
@@ -35,13 +46,11 @@ return [
         ->patch('/ranks/{id}', 'ranks.update', Controllers\UpdateRankController::class)
         ->delete('/ranks/{id}', 'ranks.delete', Controllers\DeleteRankController::class)
         ->get('/rankings', 'rankings', Controllers\OrderByPointsController::class),
+
     function (Dispatcher $events) {
         $events->subscribe(Listeners\AddRelationships::class);
         $events->subscribe(Listeners\EventHandlers::class);
         $events->subscribe(Listeners\FilterDiscussionListByHotness::class);
-
-        $events->subscribe(Access\DiscussionPolicy::class);
-        $events->subscribe(Access\PostPolicy::class);
 
         $events->listen(Saving::class, Listeners\SaveVotesToDatabase::class);
 

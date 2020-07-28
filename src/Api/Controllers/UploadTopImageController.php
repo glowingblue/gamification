@@ -3,7 +3,7 @@
 /*
  * This file is part of fof/gamification.
  *
- * Copyright (c) 2019 FriendsOfFlarum.
+ * Copyright (c) 2020 FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -79,7 +79,7 @@ class UploadTopImageController extends ShowForumController
             'target' => new Filesystem(new Local($this->app->publicPath().'/assets')),
         ]);
 
-        if (($path = $this->settings->get('topimage'.$id.'_path')) && $mount->has($file = "target://$path")) {
+        if (($path = $this->settings->get($key = "fof-gamification.topimage{$id}_path")) && $mount->has($file = "target://$path")) {
             $mount->delete($file);
         }
 
@@ -87,7 +87,7 @@ class UploadTopImageController extends ShowForumController
 
         $mount->move('source://'.pathinfo($tmpFile, PATHINFO_BASENAME), "target://$uploadName");
 
-        $this->settings->set('topimage'.$id.'_path', $uploadName);
+        $this->settings->set($key, $uploadName);
 
         return parent::data($request, $document);
     }

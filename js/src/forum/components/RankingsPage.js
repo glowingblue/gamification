@@ -1,4 +1,3 @@
-import { extend } from 'flarum/extend';
 import avatar from 'flarum/helpers/avatar';
 import Page from 'flarum/components/Page';
 import IndexPage from 'flarum/components/IndexPage';
@@ -8,6 +7,8 @@ import LogInModal from 'flarum/components/LogInModal';
 import LoadingIndicator from 'flarum/components/LoadingIndicator';
 import listItems from 'flarum/helpers/listItems';
 import username from 'flarum/helpers/username';
+import icon from 'flarum/helpers/icon';
+import setting from '../helpers/setting';
 
 export default class RankingsPage extends Page {
     init() {
@@ -21,16 +22,11 @@ export default class RankingsPage extends Page {
         this.users = [];
         this.refresh();
 
-        this.fields = [
-            'pointsPerDiscussion',
-            'pointsPerComment',
-            'pointsPerUpvote',
-            'pointsForNewLevel'
-        ];
+        this.fields = ['pointsPerDiscussion', 'pointsPerComment', 'pointsPerUpvote', 'pointsForNewLevel'];
 
         this.values = {};
         this.settingsPrefix = 'fof-gamification';
-        this.fields.forEach(key => (this.values[key] = m.prop(app.forum.attribute(this.addPrefix(key)))));
+        this.fields.forEach((key) => (this.values[key] = m.prop(app.forum.attribute(this.addPrefix(key)))));
     }
 
     view() {
@@ -38,13 +34,14 @@ export default class RankingsPage extends Page {
 
         if (this.loading) {
             loading = LoadingIndicator.component();
-        } else if (this.users.length < 25 ) {
+        } else if (this.users.length < 25) {
             loading = Button.component({
                 children: app.translator.trans('core.forum.discussion_list.load_more_button'),
                 className: 'Button',
                 onclick: this.loadMore.bind(this),
             });
         }
+
         return (
             <div className="TagsPage RankingsPage">
                 {IndexPage.prototype.hero()}
@@ -64,15 +61,13 @@ export default class RankingsPage extends Page {
                                 return [
                                     <tr className={'ranking-' + i}>
                                         {i < 4 ? (
-                                            app.forum.attribute('CustomRankingImages') == '1' ? (
+                                            setting('customRankingImages', true) ? (
                                                 <img
                                                     className="rankings-mobile rankings-image"
-                                                    src={app.forum.attribute('baseUrl') + app.forum.attribute('topimage' + i + 'Url')}
+                                                    src={app.forum.attribute('baseUrl') + app.forum.attribute(`fof-gamification.topimage${i}Url`)}
                                                 />
                                             ) : (
-                                                <td className={'rankings-mobile rankings-' + i}>
-                                                    <i className="icon fas fa-trophy"></i>
-                                                </td>
+                                                <td className={'rankings-mobile rankings-' + i}>{icon('fas fa-trophy')}</td>
                                             )
                                         ) : (
                                             <td className="rankings-4 rankings-mobile">{this.addOrdinalSuffix(i)}</td>
@@ -97,15 +92,28 @@ export default class RankingsPage extends Page {
                             })}
                         </table>
                         <div className="rankings-loadmore"> {loading}</div>
-                        <hr/>
-                        <p className='rankings-explain'>
-                            {app.translator.trans('fof-gamification.forum.ranking.explain_formula')}<br/>
+                        <hr />
+                        <p className="rankings-explain">
+                            {app.translator.trans('fof-gamification.forum.ranking.explain_formula')}
+                            <br />
                             <ul>
-                                <li>{app.translator.trans('fof-gamification.forum.ranking.explain_discussion', {points: this.values.pointsPerDiscussion()})}</li>
-                                <li>{app.translator.trans('fof-gamification.forum.ranking.explain_comments', {points: this.values.pointsPerComment()})}</li>
-                                <li>{app.translator.trans('fof-gamification.forum.ranking.explain_upvotes', {points: this.values.pointsPerUpvote()})}</li>
+                                <li>
+                                    {app.translator.trans('fof-gamification.forum.ranking.explain_discussion', {
+                                        points: this.values.pointsPerDiscussion(),
+                                    })}
+                                </li>
+                                <li>
+                                    {app.translator.trans('fof-gamification.forum.ranking.explain_comments', {
+                                        points: this.values.pointsPerComment(),
+                                    })}
+                                </li>
+                                <li>
+                                    {app.translator.trans('fof-gamification.forum.ranking.explain_upvotes', {
+                                        points: this.values.pointsPerUpvote(),
+                                    })}
+                                </li>
                             </ul>
-                            {app.translator.trans('fof-gamification.forum.ranking.explain_level', {points: this.values.pointsForNewLevel()})}
+                            {app.translator.trans('fof-gamification.forum.ranking.explain_level', { points: this.values.pointsForNewLevel() })}
                         </p>
                     </div>
                 </div>
@@ -120,7 +128,7 @@ export default class RankingsPage extends Page {
         }
 
         return this.loadResults().then(
-            results => {
+            (results) => {
                 this.users = [];
                 this.parseResults(results);
             },
@@ -132,16 +140,15 @@ export default class RankingsPage extends Page {
     }
 
     addOrdinalSuffix(i) {
-        if (app.forum.attribute('DefaultLocale') == 'en') {
-            var j = i % 10,
-                k = i % 100;
-            if (j == 1 && k != 11) {
+        if (app.data.locale === 'en') {
+            const j = i % 10;
+            const k = i % 100;
+
+            if (j === 1 && k !== 11) {
                 return i + 'st';
-            }
-            if (j == 2 && k != 12) {
+            } else if (j === 2 && k !== 12) {
                 return i + 'nd';
-            }
-            if (j == 3 && k != 13) {
+            } else if (j === 3 && k !== 13) {
                 return i + 'rd';
             }
             return i + 'th';
@@ -227,10 +234,10 @@ export default class RankingsPage extends Page {
 
         this.loading = false;
 
-        this.users.forEach(user => {
+        this.users.forEach((user) => {
             let expComments = (user.commentCount() - user.discussionCount()) * this.values.pointsPerComment(),
                 expDiscussions = user.discussionCount() * this.values.pointsPerDiscussion(),
-                expLikes = user.data.attributes.Points * this.values.pointsPerUpvote();
+                expLikes = user.points() * this.values.pointsPerUpvote();
 
             let expTotal = expComments + expDiscussions + expLikes,
                 expLevel = Math.floor(expTotal / this.values.pointsForNewLevel());
